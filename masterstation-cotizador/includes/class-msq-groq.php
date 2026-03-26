@@ -1,6 +1,6 @@
 <?php
 /**
- * Cliente Groq AI para generación de recomendaciones.
+ * Cliente Groq AI para generación de recomendaciones (OpenAI compatible).
  */
 defined( 'ABSPATH' ) || exit;
 
@@ -27,7 +27,7 @@ class MSQ_Groq {
             'messages' => [
                 [
                     'role'    => 'system',
-                    'content' => 'Eres un consultor senior de proyectos web de MasterStation.net. Responde en español, tono profesional y cautivador, en párrafos (sin viñetas).',
+                    'content' => 'Eres un consultor senior de proyectos web de MasterStation.net. Responde en español, profesional y cautivador, en párrafos (sin viñetas).',
                 ],
                 [
                     'role'    => 'user',
@@ -90,7 +90,7 @@ Genera una recomendación (máximo 300 palabras) que incluya:
 3) Próximos pasos concretos sugeridos.
 4) Cierre motivador orientado a la acción.
 
-Requisitos de estilo: español, profesional, moderno y cautivador. En párrafos, sin listas.
+Estilo: español, profesional, moderno y cautivador. En párrafos, sin listas.
 PROMPT;
     }
 }
