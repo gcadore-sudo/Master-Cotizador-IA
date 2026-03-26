@@ -13,18 +13,29 @@ class MSQ_Install {
 
         // Insertar opciones por defecto si no existen
         $defaults = [
-            'msq_admin_email'        => 'gcadore@masterstation.net',
-            'msq_whatsapp_number'    => '+584241837004',
-            'msq_country_code'       => '+58',
-            'msq_gemini_api_key'     => '',
-            'msq_gemini_model'       => 'gemini-1.5-flash',
-            'msq_ai_enabled'         => '1',
-            'msq_signature'          => "Equipo MasterStation net\ninfo@masterstation.net\nWhatsApp +584241837004",
-            'msq_email_admin_subject' => 'Nueva cotización web - {client_name} - {total}',
-            'msq_email_client_subject' => 'Tu cotización de diseño web - MasterStation',
-            'msq_email_admin_body'   => self::default_admin_email(),
-            'msq_email_client_body'  => self::default_client_email(),
-            'msq_whatsapp_template'  => self::default_whatsapp_template(),
+            'msq_admin_email'           => 'gcadore@masterstation.net',
+            'msq_whatsapp_number'       => '+584241837004',
+            'msq_country_code'          => '+58',
+
+            // IA
+            'msq_ai_enabled'            => '1',
+            'msq_ai_provider'           => 'gemini',
+
+            // Google Gemini
+            'msq_gemini_api_key'        => '',
+            'msq_gemini_model'          => 'gemini-1.5-flash',
+
+            // Groq (OpenAI compatible)
+            'msq_groq_api_key'          => '',
+            'msq_groq_model'            => 'llama-3.1-8b-instant',
+
+            // Otros
+            'msq_signature'             => "Equipo MasterStation net\ninfo@masterstation.net\nWhatsApp +584241837004",
+            'msq_email_admin_subject'   => 'Nueva cotización web - {client_name} - {total}',
+            'msq_email_client_subject'  => 'Tu cotización de diseño web - MasterStation',
+            'msq_email_admin_body'      => self::default_admin_email(),
+            'msq_email_client_body'     => self::default_client_email(),
+            'msq_whatsapp_template'     => self::default_whatsapp_template(),
         ];
 
         foreach ( $defaults as $key => $value ) {
