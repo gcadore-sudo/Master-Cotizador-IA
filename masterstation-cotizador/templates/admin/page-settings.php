@@ -55,9 +55,9 @@ if ( ! current_user_can( 'manage_options' ) ) {
             </table>
         </div>
 
-        <!-- ── IA (Gemini) ── -->
+        <!-- ── IA (Google Gemini / Groq) ── -->
         <div class="msq-card">
-            <h2>Inteligencia Artificial (Gemini)</h2>
+            <h2>Inteligencia Artificial (Google Gemini / Groq)</h2>
             <table class="form-table msq-form-table">
                 <tr>
                     <th>Activar IA</th>
@@ -65,10 +65,26 @@ if ( ! current_user_can( 'manage_options' ) ) {
                         <label>
                             <input type="checkbox" name="msq_ai_enabled" value="1"
                                 <?php checked( get_option( 'msq_ai_enabled', '1' ), '1' ); ?>>
-                            Generar recomendaciones automáticas con Gemini
+                            Generar recomendaciones automáticas con IA
                         </label>
                     </td>
                 </tr>
+
+                <tr>
+                    <th><label for="msq_ai_provider">Proveedor IA</label></th>
+                    <td>
+                        <select id="msq_ai_provider" name="msq_ai_provider">
+                            <option value="gemini" <?php selected( get_option( 'msq_ai_provider', 'gemini' ), 'gemini' ); ?>>
+                                Google Gemini
+                            </option>
+                            <option value="groq" <?php selected( get_option( 'msq_ai_provider', 'gemini' ), 'groq' ); ?>>
+                                Groq (OpenAI compatible)
+                            </option>
+                        </select>
+                        <p class="description">Selecciona el proveedor usado para generar la recomendación automática.</p>
+                    </td>
+                </tr>
+
                 <tr>
                     <th><label for="msq_gemini_api_key">Gemini API Key</label></th>
                     <td>
@@ -84,6 +100,25 @@ if ( ! current_user_can( 'manage_options' ) ) {
                         <input type="text" id="msq_gemini_model" name="msq_gemini_model" class="regular-text"
                                value="<?php echo esc_attr( get_option( 'msq_gemini_model', 'gemini-1.5-flash' ) ); ?>">
                         <p class="description">Recomendado: <code>gemini-1.5-flash</code></p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><label for="msq_groq_api_key">Groq API Key</label></th>
+                    <td>
+                        <input type="password" id="msq_groq_api_key" name="msq_groq_api_key" class="regular-text"
+                               value="<?php echo esc_attr( get_option( 'msq_groq_api_key', '' ) ); ?>"
+                               autocomplete="new-password">
+                        <p class="description">Solo se usa si el proveedor IA es Groq.</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><label for="msq_groq_model">Modelo Groq</label></th>
+                    <td>
+                        <input type="text" id="msq_groq_model" name="msq_groq_model" class="regular-text"
+                               value="<?php echo esc_attr( get_option( 'msq_groq_model', 'llama-3.1-8b-instant' ) ); ?>">
+                        <p class="description">Recomendado: <code>llama-3.1-8b-instant</code></p>
                     </td>
                 </tr>
             </table>
