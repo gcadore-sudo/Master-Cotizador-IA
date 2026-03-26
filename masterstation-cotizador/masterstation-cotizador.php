@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Constantes del plugin
-define( 'MSQ_VERSION',   '1.0.0' );
+define( 'MSQ_VERSION',   '1.0.1' );
 define( 'MSQ_FILE',      __FILE__ );
 define( 'MSQ_DIR',       plugin_dir_path( __FILE__ ) );
 define( 'MSQ_URL',       plugin_dir_url( __FILE__ ) );
@@ -27,17 +27,16 @@ require_once MSQ_DIR . 'includes/class-msq-install.php';
 require_once MSQ_DIR . 'includes/class-msq-cpt.php';
 require_once MSQ_DIR . 'includes/class-msq-validators.php';
 require_once MSQ_DIR . 'includes/class-msq-whatsapp.php';
+
 require_once MSQ_DIR . 'includes/class-msq-gemini.php';
+require_once MSQ_DIR . 'includes/class-msq-groq.php';
+require_once MSQ_DIR . 'includes/class-msq-ai.php';
+
 require_once MSQ_DIR . 'includes/class-msq-email.php';
 require_once MSQ_DIR . 'includes/class-msq-shortcode.php';
 require_once MSQ_DIR . 'includes/class-msq-rest.php';
 require_once MSQ_DIR . 'includes/class-msq-admin.php';
 require_once MSQ_DIR . 'includes/class-msq-plugin.php';
-///////////////////////////////////////
-require_once MSQ_DIR . 'includes/class-msq-gemini.php';
-require_once MSQ_DIR . 'includes/class-msq-groq.php';
-require_once MSQ_DIR . 'includes/class-msq-ai.php';
-require_once MSQ_DIR . 'includes/class-msq-email.php';
 
 register_activation_hook( __FILE__,   [ 'MSQ_Install', 'activate' ] );
 register_deactivation_hook( __FILE__, [ 'MSQ_Install', 'deactivate' ] );
