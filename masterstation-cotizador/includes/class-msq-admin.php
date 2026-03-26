@@ -191,6 +191,8 @@ class MSQ_Admin {
             'msq_country_code'         => 'sanitize_text_field',
             'msq_gemini_model'         => 'sanitize_text_field',
             'msq_gemini_api_key'       => 'sanitize_text_field',
+            'msq_groq_api_key'         => 'sanitize_text_field',
+            'msq_groq_model'           => 'sanitize_text_field',
             'msq_signature'            => 'sanitize_textarea_field',
             'msq_email_admin_subject'  => 'sanitize_text_field',
             'msq_email_client_subject' => 'sanitize_text_field',
@@ -207,6 +209,13 @@ class MSQ_Admin {
 
         // Toggle IA
         update_option( 'msq_ai_enabled', isset( $_POST['msq_ai_enabled'] ) ? '1' : '0' );
+
+        // Proveedor IA (selector)
+        $provider = sanitize_text_field( $_POST['msq_ai_provider'] ?? 'gemini' );
+        if ( ! in_array( $provider, [ 'gemini', 'groq' ], true ) ) {
+            $provider = 'gemini';
+        }
+        update_option( 'msq_ai_provider', $provider );
 
         wp_safe_redirect( add_query_arg( [ 'page' => 'msq-settings', 'msq_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
         exit;
