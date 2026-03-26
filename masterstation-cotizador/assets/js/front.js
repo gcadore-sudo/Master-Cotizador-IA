@@ -335,11 +335,24 @@
   }
 
   // ─── Recomendación IA ─────────────────────────────────────────────────────
+  function showAiFriendlyError(errorEl) {
+    if (!errorEl) return;
+    errorEl.textContent =
+      'En este momento no pudimos generar la recomendación automática. Puedes continuar con tu cotización sin problema.';
+    errorEl.classList.remove('msq-hidden');
+  }
+
   function generateAiRecommendation() {
     const btn      = document.getElementById('msq-ai-btn');
     const loading  = wizard.querySelector('.msq-ai-loading');
     const result   = wizard.querySelector('.msq-ai-result');
     const errorEl  = wizard.querySelector('.msq-ai-error');
+
+    if (!msqData.aiEnabled) {
+      if (btn) btn.classList.remove('msq-hidden');
+      showAiFriendlyError(errorEl);
+      return;
+    }
 
     if (btn)     btn.classList.add('msq-hidden');
     if (loading) loading.classList.remove('msq-hidden');
@@ -361,21 +374,24 @@
       .then(r => r.json())
       .then(data => {
         if (loading) loading.classList.add('msq-hidden');
-        if (data.success && data.text) {
+
+        if (data && data.success && data.text) {
           state.aiRecommendation = data.text;
           if (result) {
             result.textContent = data.text;
             result.classList.remove('msq-hidden');
           }
-        } else {
-          if (errorEl) errorEl.classList.remove('msq-hidden');
-          if (btn) btn.classList.remove('msq-hidden');
+          return;
         }
+
+        // Error amigable (sin mostrar error técnico)
+        if (btn) btn.classList.remove('msq-hidden');
+        showAiFriendlyError(errorEl);
       })
       .catch(() => {
         if (loading) loading.classList.add('msq-hidden');
-        if (errorEl) errorEl.classList.remove('msq-hidden');
         if (btn) btn.classList.remove('msq-hidden');
+        showAiFriendlyError(errorEl);
       });
   }
 
