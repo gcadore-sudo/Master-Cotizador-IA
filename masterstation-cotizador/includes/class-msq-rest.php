@@ -125,13 +125,19 @@ class MSQ_Rest {
         $services = self::sanitize_items( $services_raw );
         $addons   = self::sanitize_items( $addons_raw );
 
-        $result = MSQ_Gemini::get_recommendation( [
-            'services'    => $services,
-            'addons'      => $addons,
-            'client_note' => $note,
-        ] );
+$result = MSQ_AI::get_recommendation( [
+    'services'    => $services,
+    'addons'      => $addons,
+    'client_note' => $note,
+] );
 
-        return new WP_REST_Response( $result, 200 );
+// Log técnico solo para admin/server. No mostrarlo al usuario final.
+if ( empty( $result['success'] ) && ! empty( $result['error'] ) ) {
+    error_log( 'MSQ_AI recommendation failed: ' . $result['error'] );
+    $result['error'] = '';
+}
+
+        return new WP_REST_Response( [ 'success' => false, 'text' => '', 'error' => '' ], 200 );
     }
 
     public static function submit_quote( WP_REST_Request $req ): WP_REST_Response {
