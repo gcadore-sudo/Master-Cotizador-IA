@@ -40,13 +40,13 @@ class MSQ_Rest {
             'callback'            => [ __CLASS__, 'submit_quote' ],
             'permission_callback' => '__return_true',
             'args'                => [
-                'client_name'      => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ],
-                'client_email'     => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_email' ],
-                'client_whatsapp'  => [ 'type' => 'string', 'required' => true ],
-                'services'         => [ 'type' => 'array',  'required' => false ],
-                'addons'           => [ 'type' => 'array',  'required' => false ],
-                'note'             => [ 'type' => 'string', 'required' => false ],
-                'ai_recommendation'=> [ 'type' => 'string', 'required' => false ],
+                'client_name'       => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_text_field' ],
+                'client_email'      => [ 'type' => 'string', 'required' => true, 'sanitize_callback' => 'sanitize_email' ],
+                'client_whatsapp'   => [ 'type' => 'string', 'required' => true ],
+                'services'          => [ 'type' => 'array',  'required' => false ],
+                'addons'            => [ 'type' => 'array',  'required' => false ],
+                'note'              => [ 'type' => 'string', 'required' => false ],
+                'ai_recommendation' => [ 'type' => 'string', 'required' => false ],
             ],
         ] );
 
@@ -115,7 +115,8 @@ class MSQ_Rest {
         }
 
         if ( ! get_option( 'msq_ai_enabled', '1' ) ) {
-            return new WP_REST_Response( [ 'success' => false, 'text' => '', 'error' => 'IA desactivada.' ], 200 );
+            // Sin error técnico; el frontend mostrará un mensaje amigable.
+            return new WP_REST_Response( [ 'success' => false, 'text' => '', 'error' => '' ], 200 );
         }
 
         $services_raw = $req->get_param( 'services' ) ?? [];
@@ -125,19 +126,19 @@ class MSQ_Rest {
         $services = self::sanitize_items( $services_raw );
         $addons   = self::sanitize_items( $addons_raw );
 
-$result = MSQ_AI::get_recommendation( [
-    'services'    => $services,
-    'addons'      => $addons,
-    'client_note' => $note,
-] );
+        $result = MSQ_AI::get_recommendation( [
+            'services'    => $services,
+            'addons'      => $addons,
+            'client_note' => $note,
+        ] );
 
-// Log técnico solo para admin/server. No mostrarlo al usuario final.
-if ( empty( $result['success'] ) && ! empty( $result['error'] ) ) {
-    error_log( 'MSQ_AI recommendation failed: ' . $result['error'] );
-    $result['error'] = '';
-}
+        // Log técnico solo para admin/server. No mostrarlo al usuario final.
+        if ( empty( $result['success'] ) && ! empty( $result['error'] ) ) {
+            error_log( 'MSQ_AI recommendation failed: ' . $result['error'] );
+            $result['error'] = '';
+        }
 
-        return new WP_REST_Response( [ 'success' => false, 'text' => '', 'error' => '' ], 200 );
+        return new WP_REST_Response( $result, 200 );
     }
 
     public static function submit_quote( WP_REST_Request $req ): WP_REST_Response {
@@ -181,17 +182,17 @@ if ( empty( $result['success'] ) && ! empty( $result['error'] ) ) {
             'post_status' => 'publish',
             'post_type'   => 'msq_quote',
             'meta_input'  => [
-                'msq_client_name'      => $name,
-                'msq_client_email'     => $email,
-                'msq_client_whatsapp'  => $whatsapp_normalized,
-                'msq_services'         => wp_json_encode( $services ),
-                'msq_addons'           => wp_json_encode( $addons ),
-                'msq_note'             => $note,
-                'msq_ai_recommendation'=> $ai_rec,
-                'msq_total'            => $total,
-                'msq_quote_date'       => $date,
-                'msq_email_admin_sent' => '0',
-                'msq_email_client_sent'=> '0',
+                'msq_client_name'       => $name,
+                'msq_client_email'      => $email,
+                'msq_client_whatsapp'   => $whatsapp_normalized,
+                'msq_services'          => wp_json_encode( $services ),
+                'msq_addons'            => wp_json_encode( $addons ),
+                'msq_note'              => $note,
+                'msq_ai_recommendation' => $ai_rec,
+                'msq_total'             => $total,
+                'msq_quote_date'        => $date,
+                'msq_email_admin_sent'  => '0',
+                'msq_email_client_sent' => '0',
             ],
         ] );
 
@@ -279,15 +280,15 @@ if ( empty( $result['success'] ) && ! empty( $result['error'] ) ) {
         $id = $post->ID;
         return [
             'quote_id'          => $id,
-            'quote_date'        => get_post_meta( $id, 'msq_quote_date',       true ),
-            'client_name'       => get_post_meta( $id, 'msq_client_name',      true ),
-            'client_email'      => get_post_meta( $id, 'msq_client_email',     true ),
-            'client_whatsapp'   => get_post_meta( $id, 'msq_client_whatsapp',  true ),
+            'quote_date'        => get_post_meta( $id, 'msq_quote_date',        true ),
+            'client_name'       => get_post_meta( $id, 'msq_client_name',       true ),
+            'client_email'      => get_post_meta( $id, 'msq_client_email',      true ),
+            'client_whatsapp'   => get_post_meta( $id, 'msq_client_whatsapp',   true ),
             'services'          => json_decode( get_post_meta( $id, 'msq_services', true ) ?: '[]', true ),
             'addons'            => json_decode( get_post_meta( $id, 'msq_addons',   true ) ?: '[]', true ),
-            'client_note'       => get_post_meta( $id, 'msq_note',             true ),
-            'ai_recommendation' => get_post_meta( $id, 'msq_ai_recommendation',true ),
-            'total'             => (float) get_post_meta( $id, 'msq_total',    true ),
+            'client_note'       => get_post_meta( $id, 'msq_note',              true ),
+            'ai_recommendation' => get_post_meta( $id, 'msq_ai_recommendation', true ),
+            'total'             => (float) get_post_meta( $id, 'msq_total',     true ),
         ];
     }
 }
