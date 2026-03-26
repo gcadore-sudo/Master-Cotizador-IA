@@ -2,8 +2,8 @@
 /**
  * Plugin Name: MasterStation Cotizador IA
  * Plugin URI:  https://masterstation.net
- * Description: Cotizador de diseño web con formulario multi-step, panel de administración, envío de correos y recomendaciones generadas por IA (Gemini).
- * Version:     1.0.0
+ * Description: Cotizador de diseño web con formulario multi-step, panel de administración, envío de correos y recomendaciones generadas por IA (Google Gemini / Groq).
+ * Version:     1.0.1
  * Author:      MasterStation
  * Author URI:  https://masterstation.net
  * License:     GPL-2.0+
@@ -33,6 +33,11 @@ require_once MSQ_DIR . 'includes/class-msq-shortcode.php';
 require_once MSQ_DIR . 'includes/class-msq-rest.php';
 require_once MSQ_DIR . 'includes/class-msq-admin.php';
 require_once MSQ_DIR . 'includes/class-msq-plugin.php';
+///////////////////////////////////////
+require_once MSQ_DIR . 'includes/class-msq-gemini.php';
+require_once MSQ_DIR . 'includes/class-msq-groq.php';
+require_once MSQ_DIR . 'includes/class-msq-ai.php';
+require_once MSQ_DIR . 'includes/class-msq-email.php';
 
 register_activation_hook( __FILE__,   [ 'MSQ_Install', 'activate' ] );
 register_deactivation_hook( __FILE__, [ 'MSQ_Install', 'deactivate' ] );
